@@ -1,0 +1,51 @@
+<form
+  (ngSubmit)="movieForm.valid && onSubmit()"
+  [formGroup]="movieForm"
+  #movie_form="ngForm"
+>
+  <div>
+    Form submitted ? {{ movie_form.submitted }} Form valid ?
+    {{ movie_form.valid }} Form invalid ? {{ movie_form.invalid }}
+  </div>
+
+  <div formGroupName="identifier">
+    <label for="id">Id: </label>
+    <input type="text" name="id" formControlName="id" />
+
+    <label for="title">Title: </label>
+    <input type="text" name="title" formControlName="title" />
+  </div>
+  <div *ngIf="movieForm.controls.identifier.errors && movie_form.submitted">
+    <span *ngIf="movieForm.controls.identifier.errors?.['isRequired']">L'id ou le titre sont requis</span>
+  </div>
+
+  <div formArrayName="type">
+    <p>Type:</p>
+    <input type="checkbox" name="movie" formControlName="movie"/>
+    <label for="movie">Movie </label>
+    <input type="checkbox" name="serie" formControlName="serie"/>
+    <label for="serie">Serie </label>
+    <input type="checkbox" name="episode" formControlName="episode"/>
+    <label for="episode">Episode </label>
+  </div>
+
+  <label for="releaseYear">Release year: </label>
+  <input type="number" name="releaseYear" formControlName="releaseYear" />
+  <div *ngIf="movieForm.controls.releaseYear.errors">
+    <span
+      *ngIf="movieForm.controls.releaseYear.errors?.['min'] && movie_form.submitted"
+      >L'année doit être comprise entre {{ this.minReleaseYear }} et
+      {{ this.maxReleaseYear }}</span
+    >
+  </div>
+
+  <div formArrayName="file" *ngIf="movieForm.controls.identifier.controls.id.dirty">
+    <p>File:</p>
+    <input type="checkbox" name="completed" formControlName="completed"/>
+    <label for="completed">Completed</label>
+    <input type="checkbox" name="short" formControlName="short"/>
+    <label for="short">Short</label>
+  </div>
+
+  <button type="submit">Submit</button>
+</form>
